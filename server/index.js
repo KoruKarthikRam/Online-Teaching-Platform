@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // Connect database
-require("./config/database"); // make sure database.js exports the connection
+require("./config/database");
 
 const app = express();
 
@@ -27,6 +27,17 @@ app.use("/api/payments", paymentsRoutes);
 // ------------------- Test Route -------------------
 app.get("/", (req, res) => {
   res.send("Server is running!");
+});
+
+// ------------------- Health Check Route -------------------
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    status: "healthy",
+    message: "Server is running perfectly!",
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || "development",
+    port: process.env.PORT || 4000
+  });
 });
 
 // ------------------- Start Server -------------------
